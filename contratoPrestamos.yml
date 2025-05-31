@@ -1,0 +1,119 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "API de Gestión de Préstamos"
+paths:
+  /Prestamos:
+    get:
+      summary: "Listar préstamos en estado PENDIENTE"
+      description: "Retorna la lista de préstamos cuyo estado es PENDIENTE."
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Lista de préstamos"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Prestamos"
+        204:
+          description: "No hay préstamos disponibles"
+    post:
+      summary: "Crear un nuevo préstamo"
+      description: "Crea un nuevo préstamo en la base de datos."
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: prestamo
+          description: "Objeto préstamo a crear"
+          required: true
+          schema:
+            $ref: "#/definitions/Prestamos"
+      responses:
+        200:
+          description: "Préstamo creado exitosamente"
+        400:
+          description: "El préstamo ya existe o la solicitud es incorrecta"
+  /Prestamos/{id}:
+    put:
+      summary: "Actualizar un préstamo"
+      description: "Actualiza un préstamo existente identificado por su ID."
+      consumes:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: "ID del préstamo a actualizar"
+          required: true
+          type: string
+        - in: body
+          name: prestamo
+          description: "Objeto préstamo con la información actualizada"
+          required: true
+          schema:
+            $ref: "#/definitions/Prestamos"
+      responses:
+        200:
+          description: "Préstamo actualizado correctamente"
+        404:
+          description: "Préstamo no encontrado"
+    delete:
+      summary: "Eliminar un préstamo"
+      description: "Elimina un préstamo por su ID."
+      parameters:
+        - name: id
+          in: path
+          description: "ID del préstamo a eliminar"
+          required: true
+          type: string
+      responses:
+        200:
+          description: "Préstamo eliminado exitosamente"
+        404:
+          description: "Préstamo no encontrado"
+  /Prestamos/calcular/{id}:
+    get:
+      summary: "Calcular el total del préstamo"
+      description: "Calcula el monto total a pagar del préstamo basado en el tipo de cliente asociado."
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: "ID del préstamo a calcular"
+          required: true
+          type: string
+      responses:
+        200:
+          description: "Total del préstamo calculado"
+          schema:
+            type: number
+            format: double
+        404:
+          description: "Préstamo o cliente no encontrado"
+definitions:
+  Prestamos:
+    type: object
+    properties:
+      id:
+        type: string
+      monto:
+        type: number
+        format: double
+      clienteId:
+        type: string
+      fecha:
+        type: string
+        format: date
+      estado:
+        type: string
+        enum:
+          - PENDIENTE
+          - PAGADO
+    required:
+      - id
+      - monto
+      - clienteId
+      - fecha
+      - estado
