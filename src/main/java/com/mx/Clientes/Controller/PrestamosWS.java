@@ -70,7 +70,7 @@ public class PrestamosWS {
         if(prestamo == null){
             return ResponseEntity.notFound().build();
         }else{
-            Clientes cliente = clientesService.buscarCliente(id);
+            Clientes cliente = clientesService.buscarCliente(prestamo.getClienteId());
             double total = service.calcularPrestamoTotal(cliente.tipoCliente().toString(), prestamo.getMonto());
             return ResponseEntity.ok().body(total);
         }
