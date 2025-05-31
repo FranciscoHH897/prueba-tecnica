@@ -2,6 +2,7 @@ package com.mx.Clientes.Controller;
 
 
 import com.mx.Clientes.Model.Clientes;
+import com.mx.Clientes.Model.Estado;
 import com.mx.Clientes.Model.Prestamos;
 import com.mx.Clientes.Service.ClientesService;
 import com.mx.Clientes.Service.PrestamosService;
@@ -43,12 +44,12 @@ public class PrestamosWS {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizarPrestamo(@PathVariable String id, @RequestBody Prestamos prestamo) {
+    public ResponseEntity<?> actualizarPrestamo(@PathVariable String id, @RequestParam Estado estado) {
         Prestamos aux = service.buscarPrestamo(id);
         if(aux == null){
             return ResponseEntity.notFound().build();
         }else{
-            service.actualizarPrestamo(prestamo);
+            service.actualizarPrestamo(id, estado);
             return ResponseEntity.ok().build();
         }
     }

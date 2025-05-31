@@ -27,9 +27,17 @@ public class PrestamosService {
         logger.info("Préstamo creado: {}", prestamo);
     }
 
-    public void actualizarPrestamo(Prestamos prestamo) {
-        repository.save(prestamo);
-        logger.info("Préstamo actualizado: {}", prestamo);
+    public void actualizarPrestamo(String id, Estado estado) {
+        Prestamos prestamo = repository.findById(id).orElse(null);
+        if (prestamo == null) {
+            logger.info("Prestamo no encontrado");
+            return;
+        }else{
+            prestamo.setEstado(estado);
+            repository.save(prestamo);
+            logger.info("Prestamo modificado: {}", prestamo);
+            return;
+        }
     }
 
     public void eliminarPrestamo(String id) {
